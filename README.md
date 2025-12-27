@@ -3,6 +3,8 @@
 Drop-in replacement for [@n8n/chat](https://www.npmjs.com/package/@n8n/chat) with message-style conversation experience inspired by [Julian Garnier's work](https://github.com/juliangarnier). 
 **[Try Demo](https://chat.baufer.beauty)**
 
+![alt text](Screenshot.png)
+
 ## Features
 
 - 💬 **Conversational bubbles** - Messages split naturally into chat-friendly chunks

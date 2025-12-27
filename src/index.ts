@@ -42,10 +42,23 @@ export function createChat(options: ChatOptions): ChatInstance {
     throw new Error('n8n-chat-pretty: webhookUrl is required');
   }
 
+  function generateSessionId(): string {
+    if (typeof crypto !== 'undefined' && typeof crypto.randomUUID === 'function') {
+      return crypto.randomUUID();
+    }
+    // Fallback for older browsers/webviews
+    return `sid_${Date.now().toString(36)}_${Math.random().toString(36).slice(2)}`;
+  }
+
   // Get or create session ID
   const sessionKey = `n8n-chat-session-${config.chatSessionKey}`;
-  let sessionId = localStorage.getItem(sessionKey) || crypto.randomUUID();
-  localStorage.setItem(sessionKey, sessionId);
+  let sessionId = config.loadPreviousSession
+    ? (localStorage.getItem(sessionKey) || generateSessionId())
+    : generateSessionId();
+
+  if (config.loadPreviousSession) {
+    localStorage.setItem(sessionKey, sessionId);
+  }
 
   // Get target element
   const targetEl = document.querySelector(config.target!) as HTMLElement;
@@ -101,7 +114,8 @@ export function createChat(options: ChatOptions): ChatInstance {
     bubble.className = `n8n-chat-bubble ${position}`;
     const msg = document.createElement('span');
     msg.className = 'message';
-    msg.innerHTML = text;
+    // Use textContent to avoid XSS via untrusted webhook/user content
+    msg.textContent = text;
     bubble.appendChild(msg);
     return bubble;
   }
@@ -201,6 +215,35 @@ export function createChat(options: ChatOptions): ChatInstance {
     }
   }
 
+  async function parseWebhookResponse(response: Response): Promise<unknown> {
+    const contentType = response.headers.get('content-type') || '';
+    if (contentType.includes('application/json')) {
+      return await response.json();
+    }
+    const text = await response.text();
+    if (!text) return null;
+    try {
+      return JSON.parse(text);
+    } catch {
+      return text;
+    }
+  }
+
+  function extractBotMessage(data: unknown): string {
+    if (typeof data === 'string') return data;
+    if (!data || typeof data !== 'object') return config.i18n?.fallbackResponse || '';
+
+    const record = data as Record<string, unknown>;
+    const candidate = record.output ?? record.text ?? record.message;
+    if (typeof candidate === 'string') return candidate;
+    if (candidate == null) return config.i18n?.fallbackResponse || '';
+    try {
+      return JSON.stringify(candidate);
+    } catch {
+      return String(candidate);
+    }
+  }
+
   async function sendToWebhook(message: string) {
     const row = document.createElement('div');
     row.className = 'n8n-chat-message-row left';
@@ -210,24 +253,43 @@ export function createChat(options: ChatOptions): ChatInstance {
     scrollToBottom();
 
     try {
-      const response = await fetch(config.webhookUrl, {
-        method: config.webhookConfig?.method || 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          ...config.webhookConfig?.headers
-        },
-        body: JSON.stringify({
-          action: 'sendMessage',
-          [config.chatSessionKey!]: sessionId,
-          [config.chatInputKey!]: message,
-          ...config.metadata
-        })
-      });
-      
-      const data = await response.json();
+      const payload = {
+        action: 'sendMessage',
+        [config.chatSessionKey!]: sessionId,
+        [config.chatInputKey!]: message,
+        ...config.metadata
+      };
+
+      const method = (config.webhookConfig?.method || 'POST').toUpperCase();
+      const headers: Record<string, string> = {
+        ...config.webhookConfig?.headers
+      };
+
+      let url = config.webhookUrl;
+      const init: RequestInit = { method, headers };
+
+      if (method === 'GET') {
+        const u = new URL(url, window.location.href);
+        for (const [key, value] of Object.entries(payload)) {
+          if (value == null) continue;
+          u.searchParams.set(key, typeof value === 'string' ? value : JSON.stringify(value));
+        }
+        url = u.toString();
+      } else {
+        headers['Content-Type'] = headers['Content-Type'] || 'application/json';
+        init.body = JSON.stringify(payload);
+      }
+
+      const response = await fetch(url, init);
+      const data = await parseWebhookResponse(response);
       row.remove();
-      
-      const botMessage = data.output || data.text || data.message || config.i18n?.fallbackResponse;
+
+      if (!response.ok) {
+        addMessage(config.i18n?.errorMessage || `Request failed (${response.status})`, 'left', true);
+        return;
+      }
+
+      const botMessage = extractBotMessage(data) || config.i18n?.fallbackResponse || '';
       const chunks = splitIntoChunks(botMessage);
       await addMessagesSequentially(chunks, 'left');
       
@@ -278,8 +340,10 @@ export function createChat(options: ChatOptions): ChatInstance {
     },
     getSessionId: () => sessionId,
     resetSession: () => {
-      sessionId = crypto.randomUUID();
-      localStorage.setItem(sessionKey, sessionId);
+      sessionId = generateSessionId();
+      if (config.loadPreviousSession) {
+        localStorage.setItem(sessionKey, sessionId);
+      }
     }
   };
 }
