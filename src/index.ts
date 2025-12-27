@@ -39,7 +39,7 @@ export function createChat(options: ChatOptions): ChatInstance {
   
   // Validate required options
   if (!config.webhookUrl) {
-    throw new Error('n8n-chat-pretty: webhookUrl is required');
+    throw new Error('n8n-pretty-chat: webhookUrl is required');
   }
 
   function generateSessionId(): string {
@@ -63,7 +63,7 @@ export function createChat(options: ChatOptions): ChatInstance {
   // Get target element
   const targetEl = document.querySelector(config.target!) as HTMLElement;
   if (!targetEl) {
-    throw new Error(`n8n-chat-pretty: target element "${config.target}" not found`);
+    throw new Error(`n8n-pretty-chat: target element "${config.target}" not found`);
   }
 
   // Create chat structure

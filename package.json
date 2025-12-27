@@ -1,7 +1,7 @@
 {
-  "name": "n8n-chat-pretty",
+  "name": "n8n-pretty-chat",
   "version": "1.0.0",
-  "description": "A beautiful, mobile-friendly chat widget for n8n workflows with conversational bubble animations",
+  "description": "Drop-in replacement for @n8n/chat with message-style conversation experience inspired by Julian Garnier's work.",
   "main": "dist/chat.umd.js",
   "module": "dist/chat.es.js",
   "types": "dist/types/index.d.ts",
@@ -33,15 +33,15 @@
     "bubble",
     "animation"
   ],
-  "author": "baufer",
+  "author": "schaferjart",
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/baufergroup/n8n-chat-pretty.git"
+    "url": "git+https://github.com/schaferjart/n8n-pretty-chat.git"
   },
-  "homepage": "https://github.com/baufergroup/n8n-chat-pretty#readme",
+  "homepage": "https://github.com/schaferjart/n8n-pretty-chat#readme",
   "bugs": {
-    "url": "https://github.com/baufergroup/n8n-chat-pretty/issues"
+    "url": "https://github.com/schaferjart/n8n-pretty-chat/issues"
   },
   "devDependencies": {
     "typescript": "^5.3.0",

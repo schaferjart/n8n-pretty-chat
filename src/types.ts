@@ -1,5 +1,5 @@
 /**
- * Configuration options for n8n-chat-pretty
+ * Configuration options for n8n-pretty-chat
  */
 export interface ChatOptions {
   /**

@@ -1,4 +1,5 @@
-# n8n-chat-pretty
+# n8n-pretty-chat
+# n8n-pretty-chat
 
 Drop-in replacement for [@n8n/chat](https://www.npmjs.com/package/@n8n/chat) with message-style conversation experience inspired by [Julian Garnier's work](https://github.com/juliangarnier). 
 **[Try Demo](https://chat.baufer.beauty)**
@@ -18,9 +19,9 @@ Drop-in replacement for [@n8n/chat](https://www.npmjs.com/package/@n8n/chat) wit
 ### CDN (Quickest)
 
 ```html
-<link href="https://cdn.jsdelivr.net/npm/n8n-chat-pretty/dist/style.css" rel="stylesheet" />
+<link href="https://cdn.jsdelivr.net/npm/n8n-pretty-chat/dist/style.css" rel="stylesheet" />
 <script type="module">
-  import { createChat } from 'https://cdn.jsdelivr.net/npm/n8n-chat-pretty/dist/chat.es.js';
+  import { createChat } from 'https://cdn.jsdelivr.net/npm/n8n-pretty-chat/dist/chat.es.js';
 
   createChat({
     webhookUrl: 'YOUR_N8N_WEBHOOK_URL'
@@ -31,12 +32,12 @@ Drop-in replacement for [@n8n/chat](https://www.npmjs.com/package/@n8n/chat) wit
 ### npm
 
 ```bash
-npm install n8n-chat-pretty
+npm install n8n-pretty-chat
 ```
 
 ```javascript
-import 'n8n-chat-pretty/style.css';
-import { createChat } from 'n8n-chat-pretty';
+import 'n8n-pretty-chat/style.css';
+import { createChat } from 'n8n-pretty-chat';
 
 createChat({
   webhookUrl: 'YOUR_N8N_WEBHOOK_URL'
@@ -51,13 +52,13 @@ createChat({
 <!DOCTYPE html>
 <html>
 <head>
-  <link href="https://cdn.jsdelivr.net/npm/n8n-chat-pretty/dist/style.css" rel="stylesheet" />
+  <link href="https://cdn.jsdelivr.net/npm/n8n-pretty-chat/dist/style.css" rel="stylesheet" />
 </head>
 <body>
   <div id="n8n-chat" style="height: 100vh;"></div>
   
   <script type="module">
-    import { createChat } from 'https://cdn.jsdelivr.net/npm/n8n-chat-pretty/dist/chat.es.js';
+    import { createChat } from 'https://cdn.jsdelivr.net/npm/n8n-pretty-chat/dist/chat.es.js';
 
     createChat({
       webhookUrl: 'YOUR_N8N_WEBHOOK_URL',
@@ -166,7 +167,7 @@ You can also customize via CSS:
 
 ## Comparison with @n8n/chat
 
-| Feature | @n8n/chat | n8n-chat-pretty |
+| Feature | @n8n/chat | n8n-pretty-chat |
 |---------|-----------|-----------------|
 | Message splitting | ❌ | ✅ Natural sentence/paragraph splitting |
 | Typing indicator | ⚠️ Single | ✅ Between each bubble |
