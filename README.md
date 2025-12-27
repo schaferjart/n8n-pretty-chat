@@ -1,8 +1,7 @@
 # n8n-chat-pretty
 
-A beautiful, mobile-friendly chat widget for n8n workflows with conversational bubble animations.
-
-Drop-in replacement for [@n8n/chat](https://www.npmjs.com/package/@n8n/chat) with a more natural, iMessage-style conversation experience.
+Drop-in replacement for [@n8n/chat](https://www.npmjs.com/package/@n8n/chat) with message-style conversation experience inspired by [Julian Garnier's work](https://github.com/juliangarnier). 
+**[Try Demo](https://chat.baufer.beauty)**
 
 ## Features
 
@@ -11,8 +10,6 @@ Drop-in replacement for [@n8n/chat](https://www.npmjs.com/package/@n8n/chat) wit
 - 🌙 **Dark mode** - Automatic system preference detection
 - 📱 **Mobile-first** - Responsive design optimized for mobile devices
 - 🎨 **Customizable** - CSS variables for easy theming
-- 🔌 **n8n compatible** - Works with n8n Chat Trigger node out of the box
-- 📦 **Lightweight** - No dependencies (~6KB gzipped)
 
 ## Installation
 
@@ -61,7 +58,7 @@ createChat({
     import { createChat } from 'https://cdn.jsdelivr.net/npm/n8n-chat-pretty/dist/chat.es.js';
 
     createChat({
-      webhookUrl: 'https://your-n8n.com/webhook/xxx',
+      webhookUrl: 'YOUR_N8N_WEBHOOK_URL',
       initialMessages: [
         'Hey there! 👋',
         'How can I help you today?'
@@ -76,7 +73,7 @@ createChat({
 
 ```javascript
 const chat = createChat({
-  webhookUrl: 'https://your-n8n.com/webhook/xxx',
+  webhookUrl: 'YOUR_N8N_WEBHOOK_URL',
   target: '#my-chat-container',
   mode: 'fullscreen', // or 'window'
   
@@ -173,8 +170,6 @@ You can also customize via CSS:
 | Typing indicator | ⚠️ Single | ✅ Between each bubble |
 | Typing delay | ❌ Fixed | ✅ Proportional to message length |
 | Mobile optimized | ⚠️ Basic | ✅ Mobile-first design |
-| Bundle size | ~3.5MB | ~6KB |
-| Dependencies | Vue 3 | None |
 
 ## n8n Workflow Setup
 
@@ -186,7 +181,3 @@ You can also customize via CSS:
 ## License
 
 MIT
-
-## Contributing
-
-PRs welcome! See [GitHub](https://github.com/baufergroup/n8n-chat-pretty)
