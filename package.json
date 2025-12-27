@@ -1,6 +1,6 @@
 {
   "name": "n8n-pretty-chat",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Drop-in replacement for @n8n/chat with message-style conversation experience inspired by Julian Garnier's work.",
   "main": "dist/chat.umd.js",
   "module": "dist/chat.es.js",
